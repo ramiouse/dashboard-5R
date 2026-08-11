@@ -1,0 +1,40 @@
+premium-dashboard/
+├── prisma/                  # 🗄️ Urusan Database (PostgreSQL)
+│   ├── schema.prisma        # Skema tabel database lu (User, Activity, dll)
+│   └── migrations/          # Riwayat perubahan struktur database
+│
+├── public/                  # 🖼️ File statis (favicon, logo, gambar)
+│   └── favicon.svg
+│
+├── src/                     # 💻 Dapur utama kode lu
+│   ├── app/                 # 🚦 Next.js App Router (Pengganti wouter/react-router)
+│   │   ├── (auth)/          # Group route untuk halaman login/register
+│   │   │   └── login/
+│   │   │       └── page.tsx 
+│   │   ├── (dashboard)/     # Group route untuk halaman dalam dashboard
+│   │   │   ├── settings/
+│   │   │   │   └── page.tsx # Ini adalah halaman Settings lu sebelumnya
+│   │   │   └── page.tsx     # Ini adalah halaman Dashboard utama lu
+│   │   ├── api/             # ⚙️ Backend API Routes
+│   │   │   └── user/
+│   │   │       └── route.ts # Endpoint backend (misal: GET /api/user)
+│   │   ├── globals.css      # 🎨 TEMPAT TEMA LU (Ini file index.css lu sebelumnya)
+│   │   └── layout.tsx       # 🧱 Kerangka utama (Ini fungsi Shell/Layout di App.tsx)
+│   │
+│   ├── components/          # 🧩 Komponen Reusable
+│   │   ├── ui/              # Komponen hasil generate shadcn/ui (button, card, dll)
+│   │   ├── layout/          # Sidebar, Navbar, PageHeading
+│   │   └── dashboard/       # StatCard, Chart, dll
+│   │
+│   ├── lib/                 # 🛠️ Utility Functions
+│   │   ├── db.ts            # Koneksi ke PostgreSQL (Prisma Client)
+│   │   └── utils.ts         # Fungsi cn() dari shadcn (kode lu sebelumnya)
+│   │
+│   └── types/               # 🏷️ TypeScript interfaces
+│       └── index.ts
+│
+├── .env                     # 🔑 Rahasia (PORT, DATABASE_URL untuk Postgres)
+├── components.json          # ⚙️ Konfigurasi shadcn (copy dari project lama)
+├── next.config.ts           # ⚙️ Konfigurasi Next.js
+├── package.json
+└── tsconfig.json
