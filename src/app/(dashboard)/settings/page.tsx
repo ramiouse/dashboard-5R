@@ -4,12 +4,11 @@ import { useState } from "react";
 import { useTheme } from "next-themes";
 import { Gauge, UsersRound } from "lucide-react";
 import { PageHeading } from "@/components/dashboard/PageHeading";
-
-type Role = "admin" | "user";
+import { useRole } from "@/components/providers/role-provider";
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
-  const [role, setRole] = useState<Role>("admin");
+  const { role, setRole } = useRole();
   const [saved, setSaved] = useState(false);
 
   const chooseRole = (next: Role) => {
@@ -21,6 +20,7 @@ export default function Settings() {
   return (
     <div className="mx-auto max-w-[1000px] px-5 py-8 sm:px-8 lg:px-12 lg:py-11">
       <PageHeading
+        key={`${theme}-${role}`}
         eyebrow="Workspace preferences"
         title="Pengaturan"
         detail="Sesuaikan Luma dengan cara tim kamu membaca momentum."
@@ -137,6 +137,26 @@ export default function Settings() {
           </div>
         </section>
       </div>
+
+      <section className="mt-5 rounded-2xl border border-card-border bg-card p-6 sm:p-7">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <p className="font-display text-lg font-semibold tracking-[-.03em]">
+              Tentang Luma
+            </p>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Workspace analytics yang dibuat untuk memperjelas hal yang
+              penting.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2">
+            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="font-mono-ui text-[10px] text-muted-foreground">
+              v1.0.0 · stable
+            </span>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

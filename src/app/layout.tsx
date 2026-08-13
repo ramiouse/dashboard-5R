@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     // suppressHydrationWarning wajib untuk next-themes
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>

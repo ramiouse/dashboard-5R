@@ -1,12 +1,45 @@
 import Link from "next/link";
 import { Gauge, MoreHorizontal, Zap } from "lucide-react";
 import { PageHeading } from "@/components/dashboard/PageHeading";
-import { LoadingBlock } from "@/components/ui/LoadingBlock";
+import { db } from "@/lib/db";
 
-export default function Home() {
+type ActivityType = "success" | "warning" | "info";
+
+interface ActivityItem {
+  id: string;
+  type: ActivityType;
+  title: string;
+  detail: string;
+  time: string;
+}
+
+// type di database masih String bebas (belum enum) — validasi manual di sini
+// biar value yang gak dikenal gak bikin rendering rusak, fallback ke "info"
+function normalizeType(value: string): ActivityType {
+  if (value === "success" || value === "warning" || value === "info") {
+    return value;
+  }
+  return "info";
+}
+
+async function getRecentActivity(): Promise<ActivityItem[]> {
+  const rows = await db.activity.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 5,
+  });
+
+  return rows.map((row) => ({
+    id: row.id,
+    type: normalizeType(row.type),
+    title: row.title,
+    detail: row.detail,
+    time: row.time,
+  }));
+}
+
+export default async function Home() {
   const role = "admin"; // Nanti ini diganti dengan data role user aktif
-  const isLoading = false;
-  const items: any[] = []; // Nanti diganti pakai query ke database (Prisma)
+  const items = await getRecentActivity();
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12 lg:py-11">
@@ -114,19 +147,7 @@ export default function Home() {
               <MoreHorizontal size={17} />
             </button>
           </div>
-          {isLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex gap-3">
-                  <LoadingBlock className="h-8 w-8 rounded-full" />
-                  <div className="flex-1">
-                    <LoadingBlock className="h-3 w-2/3" />
-                    <LoadingBlock className="mt-2 h-2.5 w-1/3" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : items.length === 0 ? (
+          {items.length === 0 ? (
             <div
               data-testid="empty-activity"
               className="rounded-xl border border-dashed border-border px-5 py-9 text-center"
@@ -138,7 +159,40 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-1">
-              {/* Tempat merender data activity nantinya */}
+              {items.slice(0, 5).map((item) => (
+                <div
+                  data-testid={`activity-item-${item.id}`}
+                  key={item.id}
+                  className="group flex items-start gap-3 rounded-xl px-2 py-3 transition-colors hover:bg-muted/60"
+                >
+                  <div
+                    className={`mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full ${
+                      item.type === "success"
+                        ? "bg-primary/12 text-primary"
+                        : item.type === "warning"
+                          ? "bg-accent/15 text-accent"
+                          : "bg-[#5d6baf]/12 text-[#5665a6]"
+                    }`}
+                  >
+                    <span className="font-mono-ui text-[10px] font-semibold">
+                      {item.type === "success"
+                        ? "OK"
+                        : item.type === "warning"
+                          ? "!"
+                          : "i"}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-semibold">{item.title}</p>
+                    <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+                      {item.detail}
+                    </p>
+                  </div>
+                  <time className="shrink-0 pt-0.5 font-mono-ui text-[10px] text-muted-foreground/70">
+                    {item.time}
+                  </time>
+                </div>
+              ))}
             </div>
           )}
         </section>

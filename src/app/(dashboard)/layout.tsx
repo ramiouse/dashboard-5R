@@ -15,11 +15,10 @@ import {
   Settings as SettingsIcon,
   X,
 } from "lucide-react";
+import { RoleProvider, useRole } from "@/components/providers/role-provider";
 
 // TODO: Jika lu udah setup API untuk Health Check, lu bisa panggil di sini
 // import { useHealthCheck } from '@workspace/api-client-react';
-
-type Role = "admin" | "user";
 
 function Logo() {
   return (
@@ -36,13 +35,12 @@ function Logo() {
   );
 }
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Catatan: Sementara role di-hardcode. Ke depannya lu bisa pakai Context API, Zustand,
-  // atau baca dari database PostgreSQL lu untuk role user yang login.
-  const [role] = useState<Role>("admin");
+  // Role sekarang datang dari context, bukan hardcode lokal lagi
+  const { role } = useRole();
 
   // Mock data health (ganti pakai useHealthCheck kalau backend udah siap)
   const health = { status: "ok" };
@@ -231,5 +229,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  return (
+    <RoleProvider>
+      <DashboardShell>{children}</DashboardShell>
+    </RoleProvider>
   );
 }
