@@ -24,3 +24,17 @@ model Activity {
   time      String
   createdAt DateTime @default(now())
 }
+
+model Asset {
+  id        String   @id @default(cuid())
+  assetNo   String   @unique
+  name      String
+  qty       Int      @default(1)
+  location  String
+  note      String?
+  status    String   @default("active")
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

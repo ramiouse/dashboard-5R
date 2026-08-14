@@ -1,0 +1,2 @@
+cek all db di docker :
+docker exec -it pg-local psql -U postgres -c "\l"
