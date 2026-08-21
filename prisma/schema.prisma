@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm]
 }
 
 model User {
@@ -36,5 +38,10 @@ model Asset {
   date      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
+  @@index([location])
+  @@index([date])
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin, map: "Asset_name_trgm_idx")
+  @@index([assetNo(ops: raw("gin_trgm_ops"))], type: Gin, map: "Asset_assetNo_trgm_idx")
+  @@index([note(ops: raw("gin_trgm_ops"))], type: Gin, map: "Asset_note_trgm_idx")
+}

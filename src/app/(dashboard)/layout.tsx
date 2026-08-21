@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
+  Boxes,
   ChevronDown,
   CircleHelp,
   Gauge,
@@ -49,12 +50,14 @@ function DashboardShell({ children }: { children: ReactNode }) {
   const adminNav = [
     { href: "/", label: "Beranda", icon: HomeIcon },
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/inventaris-aset", label: "Inventaris Aset", icon: Boxes },
     { href: "/settings", label: "Pengaturan", icon: SettingsIcon },
   ];
 
   const userNav = [
     { href: "/", label: "Ringkasan saya", icon: HomeIcon },
     { href: "/dashboard", label: "Momentum", icon: Gauge },
+    { href: "/inventaris-aset", label: "Inventaris Aset", icon: Boxes },
     { href: "/settings", label: "Preferensi", icon: SettingsIcon },
   ];
 
@@ -184,7 +187,9 @@ function DashboardShell({ children }: { children: ReactNode }) {
                   ? role === "admin"
                     ? "Dashboard"
                     : "Momentum"
-                  : "Pengaturan"}
+                  : pathname === "/inventaris-aset"
+                    ? "Inventaris Aset"
+                    : "Pengaturan"}
             </div>
           </div>
 

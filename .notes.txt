@@ -1,0 +1,17 @@
+cek all db di docker :
+docker exec -it pg-local psql -U postgres -c "\l"
+
+
+# claude pake rizkiafinnudinmazid@gmail.com
+
+# PRISMA
+# pnpm prisma studio
+# Prisma Studio is up on http://localhost:5555
+
+
+dihapus:
+ // "pnpm": {
+  //   "onlyBuiltDependencies": [
+  //     "esbuild"
+  //   ]
+  // },
